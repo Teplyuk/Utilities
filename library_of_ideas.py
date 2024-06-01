@@ -1,6 +1,5 @@
 # library of ideas embodied in code
 # creator Teplyuk Valeriy
-# @@@
 
 
 # list with all index options
