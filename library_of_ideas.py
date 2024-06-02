@@ -7,15 +7,10 @@ def list_all_options(n):
 
     # def adding_variant(list, rank):
     #     for i in range(rank, n):
-    #         list_new = change_list(list, i, rank? True)
+    #         list_new = change_list(list, i, rank, True)
     #         if not list_new in result:
     #             result.append(list_new)
     #         adding_variant(list_new, rank + 1)
-
-    # result = []
-    # list = [i for i in range(n)]
-    # adding_variant(list, 0)
-    # # result.sort()
 
     def adding_variant(list, rank):
         for i in range(rank, n):
@@ -29,9 +24,16 @@ def list_all_options(n):
     result = []
     list = [i for i in range(n)]
     result.append(list)
-    adding_variant(list, 0)
-    # result.sort()
-
+    # 1 variant
+    # adding_variant(list, 0)
+    # 2 variant
+    while True:
+        new_list = next_item_list(list)
+        if list == new_list:
+            break
+        else:
+            list = new_list
+            result.append(list)
     return result
 
 
@@ -139,3 +141,19 @@ def convert_list_to_number(list):
     for digit in list:
         number = number * 10 + digit
     return number
+
+
+def next_item_list(list):
+    for i in range(len(list) - 2, -1, -1):
+        begin = list[:i]
+        end = list[i:]
+        end.sort()
+        for item in end:
+            if list[i] < item:
+                begin.append(item)
+                end.remove(item)
+                list = begin + end
+                break
+        if list == begin + end:
+            break
+    return list
