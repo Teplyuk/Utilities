@@ -157,3 +157,41 @@ def next_item_list(list):
         if list == begin + end:
             break
     return list
+
+
+def hamming(n):
+
+    def add_list(list):
+        res = list[3]
+        index = len(list_auxiliary)
+        for item in reversed(list_auxiliary):
+            index -= 1
+            if item[3] == res:
+                return
+            if item[3] < res:
+                list_auxiliary.insert(index + 1, list)
+                return
+        list_auxiliary.append(list)
+
+    list_auxiliary = []
+    number_next = [0, 0, 0, 1]
+    add_list(number_next)
+    for i in range(n - 1):
+        number = list_auxiliary[i]
+
+        number_next = number.copy()
+        number_next[0] = number_next[0] + 1
+        number_next[3] = number_next[3] * 2
+        add_list(number_next)
+
+        number_next = number.copy()
+        number_next[1] = number_next[1] + 1
+        number_next[3] = number_next[3] * 3
+        add_list(number_next)
+
+        number_next = number.copy()
+        number_next[2] = number_next[2] + 1
+        number_next[3] = number_next[3] * 5
+        add_list(number_next)
+
+    return list_auxiliary[n - 1][3]
