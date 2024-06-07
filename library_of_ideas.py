@@ -195,3 +195,112 @@ def hamming(n):
         add_list(number_next)
 
     return list_auxiliary[n - 1][3]
+
+
+def get_generation(cells: list[list[int]], generations: int) -> list[list[int]]:
+
+    def add_empty_borders(cells):
+        for row in cells:
+            row.insert(0, 0)
+            row.append(0)
+        cells.insert(0, [0] * len(row))
+        cells.append([0] * len(row))
+        return cells
+
+    def remove_empty_borders(cells):
+        def empty_top(cells):
+            if len(cells) == 0:
+                return False
+            for item in cells[0]:
+                if item == 1:
+                    return False
+            return True
+
+        def remove_top(cells):
+            del cells[0]
+            return cells
+
+        while empty_top(cells):
+            cells = remove_top(cells)
+
+        def empty_bottom(cells):
+            if len(cells) == 0:
+                return False
+            for item in cells[len(cells) - 1]:
+                if item == 1:
+                    return False
+            return True
+
+        def remove_bottom(cells):
+            del cells[len(cells) - 1]
+            return cells
+
+        while empty_bottom(cells):
+            cells = remove_bottom(cells)
+
+        def empty_left(cells):
+            if len(cells) == 0:
+                return False
+            for item in cells:
+                if item[0] == 1:
+                    return False
+            return True
+
+        def remove_left(cells):
+            for item in cells:
+                del item[0]
+            return cells
+
+        while empty_left(cells):
+            cells = remove_left(cells)
+
+        def empty_right(cells):
+            if len(cells) == 0:
+                return False
+            for item in cells:
+                if item[len(item) - 1] == 1:
+                    return False
+            return True
+
+        def remove_right(cells):
+            for item in cells:
+                del item[len(item) - 1]
+            return cells
+
+        while empty_right(cells):
+            cells = remove_right(cells)
+
+        return cells
+
+    def get_live_cell(cells, row, column):
+        len_row = len(cells[row])
+        len_column = len(cells)
+        displacement = [-1, 0, 1]
+        arround = 0
+        for i in displacement:
+            for j in displacement:
+                if (
+                    row + i >= 0
+                    and row + i < len_column
+                    and column + j >= 0
+                    and column + j < len_row
+                    and (i != 0 or j != 0)
+                ):
+                    arround += cells[row + i][column + j]
+        if arround == 3:
+            return 1
+        if arround == 2:
+            return cells[row][column]
+        return 0
+
+    for _ in range(generations):
+        cells = add_empty_borders(cells)
+        gen_cells = []
+        for i in range(len(cells)):
+            row = []
+            for j in range(len(cells[i])):
+                row.append(get_live_cell(cells, i, j))
+            gen_cells.append(row)
+        cells = remove_empty_borders(gen_cells)
+
+    return cells
