@@ -304,3 +304,127 @@ def get_generation(cells: list[list[int]], generations: int) -> list[list[int]]:
         cells = remove_empty_borders(gen_cells)
 
     return cells
+
+
+def exp_sum_full(n):
+
+    def add_variant():
+        new_result = []
+        for list in result:
+            for i in range(len(list)):
+                if i == 0 or list[i] != list[i - 1] and list[i] != 0:
+                    new_list = list.copy()
+                    new_list[i] += 1
+                if new_list not in new_result:
+                    new_result.append(new_list)
+        return new_result
+
+    result = []
+    for i in range(n):
+        result = add_variant()
+        result.append([1] * (i + 1) + [0] * (n - i - 1))
+
+    return result
+
+
+def list_prime_numbers(n):
+    """index of list is prime"""
+    list = [True] * n
+    list[0] = list[1] = False
+    for i in range(2, n):
+        if list[i]:
+            for j in range(i * 2, n, i):
+                list[j] = False
+    return list
+
+
+def greatest_common_divisor(a, b):
+    # if a > b:
+    #     return greatest_common_divisor(a - b, b)
+    # elif a < b:
+    #     return greatest_common_divisor(a, b - a)
+    # else:
+    #     return a
+
+    if b == 0:
+        return a
+    return greatest_common_divisor(b, a % b)
+
+
+def fast_exponentiation(a: float, n: int):
+    if n == 0:
+        return 1
+    elif n % 2 == 0:
+        return fast_exponentiation(a * a, n / 2)
+    elif n % 2 == 1:
+        return fast_exponentiation(a, n - 1) * a
+
+
+def generate_list_numbers(calculus, rank):
+
+    def generate_next_numbers(rank, prefix):
+        if rank == 0:
+            result.append(prefix.copy())
+            return
+        # prefix = prefix or []
+        for digit in range(calculus):
+            # prefix.append(digit)
+            generate_next_numbers(rank - 1, prefix + [digit])
+            # prefix.pop()
+
+    result = []
+    generate_next_numbers(rank, [])
+    return result
+
+
+def generate_permutatuon(calculus, rank):
+
+    def generate_next_numbers(rank, prefix):
+        if rank == 0:
+            result.append(prefix.copy())
+            return
+        # prefix = prefix or []
+        for digit in range(calculus):
+            if digit in prefix:
+                continue
+            # prefix.append(digit)
+            generate_next_numbers(rank - 1, prefix + [digit])
+            # prefix.pop()
+
+    result = []
+    if rank > calculus:
+        rank = calculus
+    generate_next_numbers(rank, [])
+    return result
+
+
+def different_trajectories(q_point, max_step):
+    list = [0] * (max_step - 1) + [1] + [0] * (q_point)
+    for i in range(max_step, q_point + max_step):
+        for step in range(max_step):
+            list[i] += list[i - step - 1]
+    return list[q_point + max_step - 1]
+
+
+def quantity_combinations_numbers(n):
+    """quantity of combinations of numbers to obtain the sum of the number n"""
+    if n < 0:
+        return 0
+    partitions = [0] * (n + 1)
+    partitions[0] = 1
+
+    for i in range(1, n + 1):
+        j = 1
+        while True:
+            pentagonal1 = i - (3 * j**2 - j) // 2
+            pentagonal2 = i - (3 * j**2 + j) // 2
+            if pentagonal1 < 0 and pentagonal2 < 0:
+                break
+            sign = -1 if j % 2 == 0 else 1
+            if pentagonal1 >= 0:
+                partitions[i] += sign * partitions[pentagonal1]
+            if pentagonal2 >= 0:
+                partitions[i] += sign * partitions[pentagonal2]
+            j += 1
+
+    return partitions[n]
