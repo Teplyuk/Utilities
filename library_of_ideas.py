@@ -428,3 +428,44 @@ def quantity_combinations_numbers(n):
             j += 1
 
     return partitions[n]
+
+
+def longest_common_subsequence(A, B):
+    F = [[0] * (len(B) + 1) for _ in range(len(A) + 1)]
+    for i in range(1, len(A) + 1):
+        for j in range(1, len(B) + 1):
+            if A[i - 1] == B[j - 1]:
+                F[i][j] = F[i - 1][j - 1] + 1
+            else:
+                F[i][j] = max(F[i - 1][j], F[i][j - 1])
+    return F[-1][-1]
+
+
+def longest_increasing_subsequence(A):
+    F = [1] + [0] * (len(A) - 1)
+    max = 1
+    for i in range(1, len(A)):
+        m = 0
+        for j in range(0, i):
+            if A[j] < A[i] and m < F[j]:
+                m = F[j]
+        F[i] = m + 1
+        if max < m + 1:
+            max = m + 1
+    return max
+
+
+def levenshtein_distance(A, B):
+    F = [
+        [i + j if i * j == 0 else 0 for j in range(len(B) + 1)]
+        for i in range(len(A) + 1)
+    ]
+
+    for i in range(1, len(A) + 1):
+        for j in range(1, len(B) + 1):
+            if A[i - 1] == B[j - 1]:
+                F[i][j] = F[i - 1][j - 1]
+            else:
+                F[i][j] = 1 + min(F[i - 1][j], F[i][j - 1], F[i - 1][j - 1])
+
+    return F[len(A)][len(B)]
