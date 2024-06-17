@@ -442,17 +442,16 @@ def longest_common_subsequence(A, B):
 
 
 def longest_increasing_subsequence(A):
-    F = [1] + [0] * (len(A) - 1)
-    max = 1
+    F = [1] + [0] * (len(A))
     for i in range(1, len(A)):
-        m = 0
         for j in range(0, i):
-            if A[j] < A[i] and m < F[j]:
-                m = F[j]
-        F[i] = m + 1
-        if max < m + 1:
-            max = m + 1
-    return max
+            if A[j] < A[i] and F[i] < F[j]:
+                F[i] = F[j]
+        F[i] += 1
+        if F[len(A)] < F[i]:
+            F[len(A)] = F[i]
+
+    return F[len(A)]
 
 
 def levenshtein_distance(A, B):
