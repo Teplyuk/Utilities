@@ -468,3 +468,36 @@ def levenshtein_distance(A, B):
                 F[i][j] = 1 + min(F[i - 1][j], F[i][j - 1], F[i - 1][j - 1])
 
     return F[len(A)][len(B)]
+
+
+def search_image_string(S, I):
+    F = [0] * len(I)
+    j = 0
+    i = 1
+    while True:
+        if I[i] == I[j]:
+            F[i] = j + 1
+            i += 1
+            j += 1
+        elif j == 0:
+            # F[i] = 0
+            i += 1
+        else:
+            j = F[j - 1]
+        if i == len(I):
+            break
+
+    k = 0
+    l = 0
+    while True:
+        if S[k] == I[l]:
+            k += 1
+            l += 1
+            if l == len(I):
+                return True
+        elif l == 0:
+            k += 1
+            if k == len(S):
+                return False
+        else:
+            l = F[l - 1]
